@@ -28,9 +28,17 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database
 #membuat database model
 class ModelDatabase(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    nama = db.Column(db.String(100))
-    umur = db.Column(db.Integer)
-    alamat = db.Column(db.TEXT)
+    age = db.Column(db.Float)
+    sex = db.Column(db.Float)
+    cp = db.Column(db.Float)
+    trestbps = db.Column(db.Float)
+    chol = db.Column(db.Float)
+    fbs = db.Column(db.Float)
+    restecg = db.Column(db.Float)
+    thalach = db.Column(db.Float) 
+    exang = db.Column(db.Float)
+    oldpeak = db.Column(db.Float)
+    slope = db.Column(db.Float)
 
     #method utk menyimpan data
     def save(self):
@@ -60,10 +68,18 @@ class ContohResource(Resource):
         #iterasi data pada modelDatabase memakai list comprehension
         output = [
             {
-                "id":data.id,
-                "nama":data.nama,
-                "umur":data.umur,
-                "alamat":data.alamat
+                "id" : data.id,
+                "age" : data.age,
+                "sex" : data.sex,
+                "cp" : data.cp,
+                "trestbps" : data.trestbps,
+                "chol" : data.chol,
+                "fbs" : data.fbs,
+                "restecg" : data.restecg,
+                "thalach" : data.thalach, 
+                "exang" : data.exang,
+                "oldpeak" : data.oldpeak,
+                "slope" : data.slope
             }
             for data in query
                  ]
@@ -78,16 +94,37 @@ class ContohResource(Resource):
         return response,200
 
     def post(self):
-        dataNama = request.form["nama"]
-        dataUmur = request.form["umur"]
-        dataAlamat = request.form["alamat"]
+        ageData = request.form["age"]
+        sexData = request.form["sex"]
+        cpData = request.form["cp"]
+        trestbpsData = request.form["trestbps"]
+        cholData = request.form["chol"]
+        fbsData = request.form["fbs"]
+        restecgData = request.form["restecg"]
+        thalachData = request.form["thalach"] 
+        exangData = request.form["exang"]
+        oldpeakData = request.form["oldpeak"]
+        slopeData = request.form["slope"]
 
         #dalam json ada key sama value, keynya yg dalam kurung kotak valuenya yg habis tanda sama dengan
         #identitas["nama"] = nama
         #identitas["umur"] = umur
  
         #masukkan data ke dalam database model
-        model = ModelDatabase(nama=dataNama,umur=dataUmur,alamat=dataAlamat)
+        model = ModelDatabase(
+            age = ageData,
+            sex = sexData,
+            cp = cpData,
+            trestbps = trestbpsData,
+            chol = cholData,
+            fbs = fbsData,
+            restecg = restecgData,
+            thalach = thalachData, 
+            exang = exangData,
+            oldpeak = oldpeakData,
+            slope = slopeData
+
+            )
         model.save()
         response = {"msg":"data berhasil dimasukkan", "code":200,}
         return response,200
@@ -118,14 +155,31 @@ class UpdateDatabase(Resource):
         query = ModelDatabase.query.get(id)
 
         #form untuk edit
-        editNama = request.form["nama"]
-        editUmur = request.form["umur"]
-        editAlamat = request.form["alamat"]
+        ageEdit = request.form["age"]
+        sexEdit = request.form["sex"]
+        cpEdit = request.form["cp"]
+        trestbpsEdit = request.form["trestbps"]
+        cholEdit = request.form["chol"]
+        fbsEdit = request.form["fbs"]
+        restecgEdit = request.form["restecg"]
+        thalachEdit = request.form["thalach"] 
+        exangEdit = request.form["exang"]
+        oldpeakEdit = request.form["oldpeak"]
+        slopeEdit = request.form["slope"]
         
         #replace nilai yg ada di kolom
-        query.nama = editNama
-        query.umur = editUmur
-        query.alamat = editAlamat
+        query.age = ageEdit
+        query.sex = sexEdit
+        query.cp = cpEdit
+        query.trestbps = trestbpsEdit
+        query.chol = cholEdit
+        query.fbs = fbsEdit
+        query.restecg = restecgEdit
+        query.thalach = thalachEdit
+        query.exang = exangEdit
+        query.oldpeak = oldpeakEdit
+        query.slope = slopeEdit
+    
         db.session.commit()
 
         response = {
